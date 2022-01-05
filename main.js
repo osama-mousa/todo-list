@@ -4,31 +4,31 @@ input.focus();
 input.addEventListener("keyup", function(event) {
     // Number 13 is the "Enter" key on the keyboard
     if (event.keyCode === 13 && input.value !== "") {
-    todoList.push(input.value);
-    console.log(todoList);
-    const ul = document.getElementById("todos");
-    const li = document.createElement("li");
-    li.innerText = input.value;
-    li.addEventListener("contextmenu",function(ev){
-      ev.preventDefault()
-      if(confirm("Are you sure to delete the Todo?")){
-        ul.removeChild(li);
-      }
-      input.focus();
-    })
-    li.addEventListener("click",function(eve){
-      if(li.classList.value =="completed") {
-        li.classList.value="";
-      }else{
-      li.classList.add("completed");
+        todoList.push(input.value);
+        console.log(todoList);
+        const ul = document.getElementById("todos");
+        const li = document.createElement("li");
+        li.innerText = input.value;
+        li.addEventListener("contextmenu", function(ev) {
+            ev.preventDefault()
+            if (confirm("Are you sure to delete the Todo?")) {
+                ul.removeChild(li);
+            }
+            input.focus();
+        })
+        li.addEventListener("click", function(eve) {
+            if (li.classList.value == "completed") {
+                li.classList.value = "";
+            } else {
+                li.classList.add("completed");
+            }
+            input.focus();
+        })
+        ul.appendChild(li);
+        input.value = "";
     }
-      input.focus();
-    })
-    ul.appendChild(li);
-    input.value="";
-    }
-    
-  });
+
+});
 
 
 
@@ -50,14 +50,14 @@ input.addEventListener("keyup", function(event) {
 
 
 
-  
+
 //___________________________________________________________________
 
-  // li.addEventListener("contextmenu",function(ev){
-  //   if(ev.preventDefault()){
-  //     li.value="";
-  //   }
-  // })
+// li.addEventListener("contextmenu",function(ev){
+//   if(ev.preventDefault()){
+//     li.value="";
+//   }
+// })
 
 
 //__________________________________________________________________
