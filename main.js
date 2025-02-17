@@ -4,30 +4,37 @@ const ul = document.getElementById('todos');
 
 // تحميل المهام المحفوظة عند تحميل الصفحة
 function loadTodos() {
-    todoList.forEach(todo => {
-        const li = createTodoElement(todo);
+    ul.innerHTML = ''; // مسح المحتوى الحالي
+    todoList.forEach((todo, index) => {
+        const li = createTodoElement(todo, index);
         ul.appendChild(li);
     });
 }
 
 // إنشاء عنصر li جديد
-function createTodoElement(todoText) {
+function createTodoElement(todo, index) {
     const li = document.createElement('li');
-    li.innerText = todoText;
+    li.innerText = todo.text;
+
+    // إذا كانت المهمة مكتملة، نضيف class "completed"
+    if (todo.completed) {
+        li.classList.add('completed');
+    }
 
     // إضافة حدث لحذف المهمة
-    li.addEventListener('contextmenu', function(ev) {
+    li.addEventListener('contextmenu', function (ev) {
         ev.preventDefault();
         if (confirm("Are you sure to delete the Todo?")) {
-            ul.removeChild(li);
-            removeTodoFromStorage(todoText);
+            removeTodoFromStorage(index); // حذف المهمة من القائمة
+            ul.removeChild(li); // حذف العنصر من الواجهة
         }
         input.focus();
     });
 
     // إضافة حدث لإكمال المهمة
-    li.addEventListener('click', function() {
+    li.addEventListener('click', function () {
         li.classList.toggle('completed');
+        updateTodoStatus(index, li.classList.contains('completed')); // تحديث حالة المهمة
         input.focus();
     });
 
@@ -35,28 +42,34 @@ function createTodoElement(todoText) {
 }
 
 // إضافة مهمة جديدة
-input.addEventListener('keyup', function(event) {
+input.addEventListener('keyup', function (event) {
     if (event.keyCode === 13 && input.value !== "") {
         const todoText = input.value;
-        todoList.push(todoText);
-        localStorage.setItem('todos', JSON.stringify(todoList));
+        const newTodo = { text: todoText, completed: false }; // إنشاء كائن مهمة جديد
+        todoList.push(newTodo); // إضافة المهمة إلى المصفوفة
+        localStorage.setItem('todos', JSON.stringify(todoList)); // حفظ المصفوفة في localStorage
 
-        const li = createTodoElement(todoText);
-        ul.appendChild(li);
-        input.value = "";
+        const li = createTodoElement(newTodo, todoList.length - 1);
+        ul.appendChild(li); // إضافة العنصر إلى الواجهة
+        input.value = ""; // مسح حقل الإدخال
     }
 });
 
 // حذف مهمة من localStorage
-function removeTodoFromStorage(todoText) {
-    todoList = todoList.filter(todo => todo !== todoText);
-    localStorage.setItem('todos', JSON.stringify(todoList));
+function removeTodoFromStorage(index) {
+    todoList.splice(index, 1); // حذف المهمة من المصفوفة
+    localStorage.setItem('todos', JSON.stringify(todoList)); // تحديث localStorage
+}
+
+// تحديث حالة المهمة (مكتملة أو غير مكتملة)
+function updateTodoStatus(index, completed) {
+    todoList[index].completed = completed; // تحديث حالة المهمة
+    localStorage.setItem('todos', JSON.stringify(todoList)); // تحديث localStorage
 }
 
 // تحميل المهام عند بدء التشغيل
 loadTodos();
 input.focus();
-
 
 
 
