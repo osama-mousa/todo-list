@@ -83,12 +83,21 @@ small {
 }
 
 .footer {
-    background-color: #fff;
+/*     background-color: #fff; */
     text-align: center;
     padding: 20px;
     width: 100%;
-    box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1);
+/*     box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1); */
     margin-top: auto;
+}
+
+.footer a {
+    color: inherit; /* استخدام لون النص الحالي */
+    text-decoration: none; /* إزالة التسطير */
+}
+
+.footer a:hover {
+    text-decoration: underline; /* إضافة تسطير عند التمرير */
 }
 
 /* Responsive Design */
