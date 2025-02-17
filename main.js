@@ -1,34 +1,109 @@
-let todoList = [];
-const input = document.getElementById(`input`);
-input.focus();
-input.addEventListener("keyup", function(event) {
-    // Number 13 is the "Enter" key on the keyboard
+let todoList = JSON.parse(localStorage.getItem('todos')) || [];
+const input = document.getElementById('input');
+const ul = document.getElementById('todos');
+
+// تحميل المهام المحفوظة عند تحميل الصفحة
+function loadTodos() {
+    todoList.forEach(todo => {
+        const li = createTodoElement(todo);
+        ul.appendChild(li);
+    });
+}
+
+// إنشاء عنصر li جديد
+function createTodoElement(todoText) {
+    const li = document.createElement('li');
+    li.innerText = todoText;
+
+    // إضافة حدث لحذف المهمة
+    li.addEventListener('contextmenu', function(ev) {
+        ev.preventDefault();
+        if (confirm("Are you sure to delete the Todo?")) {
+            ul.removeChild(li);
+            removeTodoFromStorage(todoText);
+        }
+        input.focus();
+    });
+
+    // إضافة حدث لإكمال المهمة
+    li.addEventListener('click', function() {
+        li.classList.toggle('completed');
+        input.focus();
+    });
+
+    return li;
+}
+
+// إضافة مهمة جديدة
+input.addEventListener('keyup', function(event) {
     if (event.keyCode === 13 && input.value !== "") {
-        todoList.push(input.value);
-        console.log(todoList);
-        const ul = document.getElementById("todos");
-        const li = document.createElement("li");
-        li.innerText = input.value;
-        li.addEventListener("contextmenu", function(ev) {
-            ev.preventDefault()
-            if (confirm("Are you sure to delete the Todo?")) {
-                ul.removeChild(li);
-            }
-            input.focus();
-        })
-        li.addEventListener("click", function(eve) {
-            if (li.classList.value == "completed") {
-                li.classList.value = "";
-            } else {
-                li.classList.add("completed");
-            }
-            input.focus();
-        })
+        const todoText = input.value;
+        todoList.push(todoText);
+        localStorage.setItem('todos', JSON.stringify(todoList));
+
+        const li = createTodoElement(todoText);
         ul.appendChild(li);
         input.value = "";
     }
-
 });
+
+// حذف مهمة من localStorage
+function removeTodoFromStorage(todoText) {
+    todoList = todoList.filter(todo => todo !== todoText);
+    localStorage.setItem('todos', JSON.stringify(todoList));
+}
+
+// تحميل المهام عند بدء التشغيل
+loadTodos();
+input.focus();
+
+
+
+
+
+
+
+
+
+
+
+
+
+----------------------------------------------
+// last code
+
+
+// let todoList = [];
+// const input = document.getElementById(`input`);
+// input.focus();
+// input.addEventListener("keyup", function(event) {
+//     // Number 13 is the "Enter" key on the keyboard
+//     if (event.keyCode === 13 && input.value !== "") {
+//         todoList.push(input.value);
+//         console.log(todoList);
+//         const ul = document.getElementById("todos");
+//         const li = document.createElement("li");
+//         li.innerText = input.value;
+//         li.addEventListener("contextmenu", function(ev) {
+//             ev.preventDefault()
+//             if (confirm("Are you sure to delete the Todo?")) {
+//                 ul.removeChild(li);
+//             }
+//             input.focus();
+//         })
+//         li.addEventListener("click", function(eve) {
+//             if (li.classList.value == "completed") {
+//                 li.classList.value = "";
+//             } else {
+//                 li.classList.add("completed");
+//             }
+//             input.focus();
+//         })
+//         ul.appendChild(li);
+//         input.value = "";
+//     }
+
+// });
 
 
 
